@@ -22,7 +22,7 @@ export default function Home() {
     <div className="h-screen flex flex-col items-center justify-center">
       <Card size="sm" className="mx-auto w-full max-w-sm">
         <CardHeader>
-          <CardTitle>Small Card</CardTitle>
+          <CardTitle>Small Card Updated</CardTitle>
           <CardDescription>
             This card uses the small size variant.
           </CardDescription>
