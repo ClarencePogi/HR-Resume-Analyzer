@@ -6,6 +6,8 @@ import {
 	SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuButton,
 	SidebarMenuItem, SidebarRail
 } from "@/components/ui/sidebar"
+import { UserButton } from '@clerk/nextjs'
+
 import Link from "next/link"
 import SideBarLogo from "@/components/SideBarLogo";
 
@@ -17,11 +19,11 @@ const navMain = [
 		items: [
 			{
 				title: "Manage Users",
-				url: "#",
+				url: "/admin/manage-users",
 			},
 			{
 				title: "Manage Roles",
-				url: "#",
+				url: "/admin/manage-roles",
 			},
 		],
 	},
@@ -31,24 +33,24 @@ const navMain = [
 		items: [
 			{
 				title: "Dashboard",
-				url: "#",
+				url: "/hr/dashboard",
 			},
 			{
 				title: "Resumes",
-				url: "#",
+				url: "/hr/resumes",
 				isActive: true,
 			},
 			{
 				title: "Candidates",
-				url: "#",
+				url: "/hr/candidates",
 			},
 			{
 				title: "AI Assistant",
-				url: "#",
+				url: "/hr/ai-assistant",
 			},
 			{
 				title: "Compare",
-				url: "#",
+				url: "/hr/compare",
 			}
 		],
 	}

@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 
 import { useTheme } from "next-themes"
+import { UserButton } from "@clerk/nextjs"
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
     const { setTheme } = useTheme()
@@ -47,7 +48,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                             </BreadcrumbList>
                         </Breadcrumb>
                     </div>
-                    <div>
+                    <div className="flex items-center gap-2">                        
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <Button variant="outline" size="icon">
@@ -68,6 +69,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                                 </DropdownMenuItem>
                             </DropdownMenuContent>
                         </DropdownMenu>
+                        <UserButton />
                     </div>
                 </header>
                 <div className="flex flex-1 flex-col gap-4 p-4">
