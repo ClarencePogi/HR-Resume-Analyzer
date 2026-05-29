@@ -6,7 +6,6 @@ import {
 	SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuButton,
 	SidebarMenuItem, SidebarRail
 } from "@/components/ui/sidebar"
-import { UserButton } from '@clerk/nextjs'
 
 import Link from "next/link"
 import SideBarLogo from "@/components/SideBarLogo";

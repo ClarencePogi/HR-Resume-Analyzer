@@ -20,7 +20,6 @@ import {
 } from "@/components/ui/dropdown-menu"
 
 import { useTheme } from "next-themes"
-import { UserButton } from "@clerk/nextjs"
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
     const { setTheme } = useTheme()
@@ -69,17 +68,10 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                                 </DropdownMenuItem>
                             </DropdownMenuContent>
                         </DropdownMenu>
-                        <UserButton />
                     </div>
                 </header>
                 <div className="flex flex-1 flex-col gap-4 p-4">
                     {children}
-                    {/* <div className="grid auto-rows-min gap-4 md:grid-cols-3">
-                        <div className="aspect-video rounded-xl bg-muted/50" />
-                        <div className="aspect-video rounded-xl bg-muted/50" />
-                        <div className="aspect-video rounded-xl bg-muted/50" />
-                    </div>
-                    <div className="min-h-[100vh] flex-1 rounded-xl bg-muted/50 md:min-h-min" /> */}
                 </div>
             </SidebarInset>
         </SidebarProvider>

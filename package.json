@@ -9,7 +9,6 @@
     "lint": "eslint"
   },
   "dependencies": {
-    "@clerk/nextjs": "^7.4.1",
     "@fontsource-variable/figtree": "^5.2.10",
     "@prisma/client": "^7.8.0",
     "class-variance-authority": "^0.7.1",
