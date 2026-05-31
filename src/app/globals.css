@@ -124,6 +124,11 @@
   * {
     @apply border-border outline-ring/50;
   }
+
+  .input-base {
+    @apply w-full rounded-lg bg-slate-900/60 border border-slate-700 px-4 py-2.5 text-sm text-slate-100 placeholder:text-slate-600 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500/50 transition;
+  }
+
   body {
     @apply bg-background text-foreground;
   }

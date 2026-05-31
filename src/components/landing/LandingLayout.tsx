@@ -1,3 +1,4 @@
+import Link from "next/link";
 import LandingHeaderLogo from "./LandingHeaderLogo";
 import LandingMenu from "./LandingMenu";
 
@@ -11,8 +12,16 @@ export default function LandingLayout({ children }: { children: React.ReactNode 
                 <div className="flex flex-1 justify-end gap-6">
                     <LandingMenu/>
                     <div className="flex gap-3 px-4">
-                        <Button variant="outline">Sign up</Button>
-                        <Button>Login</Button>
+                        <Link href="/auth/sign-up">
+                            <Button variant="outline">
+                                Sign up
+                            </Button>
+                        </Link>
+                        <Link href="/auth/login">
+                            <Button>
+                                Login
+                            </Button>
+                        </Link>
                     </div>
                 </div>
             </header>
