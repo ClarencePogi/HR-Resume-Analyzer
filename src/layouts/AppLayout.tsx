@@ -12,14 +12,10 @@ import React from "react"
 
 import { Moon, Sun } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 
 import { useTheme } from "next-themes"
+import { logout } from "@/app/auth/login/actions"
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
     const { setTheme } = useTheme()
@@ -68,6 +64,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                                 </DropdownMenuItem>
                             </DropdownMenuContent>
                         </DropdownMenu>
+                        <Button onClick={() => logout()} className="cursor-pointer" variant="outline">Logout</Button>
                     </div>
                 </header>
                 <div className="flex flex-1 flex-col gap-4 p-4">

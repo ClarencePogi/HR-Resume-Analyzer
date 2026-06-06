@@ -1,13 +1,9 @@
 "use server";
-import { createSession } from "@/lib/session";
+import { createSession, deleteSession } from "@/lib/session";
 import { redirect } from "next/navigation";
 import { z } from "zod"
-
-const testUser = {
-    id: '1',
-    email: 'test@example.com',
-    password: 'password'
-};
+import bcrypt from "bcryptjs";
+import { prisma } from "@/lib/prisma";
 
 const loginSchema = z.object({
     email: z.string().email({ message: 'Invalid email address' }).trim(),
@@ -24,8 +20,9 @@ export async function login(prevState: any, formData: FormData) {
     }
 
     const { email, password } = result.data;
+    const user = await prisma.user.findUnique({ where: { email } });
 
-    if(email !== testUser.email || password !== testUser.password) {
+    if(!user) {
         return {
             errors: {
                 email: ["Invalid email or password."]
@@ -33,9 +30,22 @@ export async function login(prevState: any, formData: FormData) {
         }
     }
 
-    await createSession(testUser.id);
+    const isValid = await bcrypt.compare(password, user.password);
+    console.log(isValid);
+    if(!isValid) {
+        return {
+            errors: {
+                email: ["Invalid email or password."]
+            }
+        }
+    }
+
+    await createSession(user.id.toString());
     
     redirect('/hr/dashboard');
 }
 
-export async function logout() {}
+export async function logout() {
+    await deleteSession();
+    redirect('/auth/login');
+}

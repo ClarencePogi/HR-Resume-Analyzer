@@ -19,17 +19,6 @@ export default function LoginPage() {
         if (error) setError("");
     };
 
-    // const handleSubmit = async (e: React.FormEvent) => {
-    //     e.preventDefault();
-    //     setLoading(true);
-    //     setError("");
-    //     // TODO: wire up real login logic
-    //     await new Promise((r) => setTimeout(r, 1500));
-    //     // Simulate wrong credentials for demo
-    //     setError("Invalid email or password. Please try again.");
-    //     setLoading(false);
-    // };
-
     return (
         <main className="min-h-screen bg-gradient-to-r from-slate-900 to-slate-700 flex items-center justify-center px-4">
             {/* Subtle grid overlay */}
@@ -95,12 +84,6 @@ export default function LoginPage() {
                         <div className="flex flex-col gap-1.5">
                             <div className="flex items-center justify-between">
                                 <label className="text-xs font-medium text-slate-400 uppercase tracking-widest">Password</label>
-                                <Link
-                                    href="/forgot-password"
-                                    className="text-xs text-sky-400 hover:text-sky-300 underline underline-offset-2 transition"
-                                >
-                                    Forgot password?
-                                </Link>
                             </div>
                             <div className="relative">
                                 <input
@@ -132,12 +115,22 @@ export default function LoginPage() {
                                 </button>
                             </div>
                         </div>
-
-                        {/* Remember me */}
-                        <label className="flex items-center gap-3 cursor-pointer mt-1">
-                            <input type="checkbox" className="accent-sky-500 w-4 h-4 flex-none" />
-                            <span className="text-sm text-slate-400">Remember me for 30 days</span>
-                        </label>
+                        
+                        <div className="flex justify-between">
+                             {/* Remember me */}
+                            <label className="flex items-center gap-3 cursor-pointer mt-1">
+                                <input type="checkbox" className="accent-sky-500 w-4 h-4 flex-none" />
+                                <span className="text-sm text-slate-400">Remember me for 30 days</span>
+                            </label>
+                            
+                            <Link
+                                href="/forgot-password"
+                                className="text-xs text-sky-400 hover:text-sky-300 underline underline-offset-2 transition"
+                            >
+                                Forgot password?
+                            </Link>
+                        </div>
+                       
 
                         {/* Submit */}
                         <button

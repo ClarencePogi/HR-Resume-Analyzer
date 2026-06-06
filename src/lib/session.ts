@@ -40,3 +40,7 @@ export async function decrypt(session: string | undefined = "") {
         console.log("Failed to verify session");
     }
 }
+
+export async function deleteSession() {
+    (await cookies()).delete('session');
+}
