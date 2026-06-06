@@ -10,6 +10,8 @@ export default function SignUpPage() {
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log(e.target.name);
+    console.log(e.target.value);
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 

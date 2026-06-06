@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useActionState, useState } from "react";
 import Link from "next/link";
 
 import { Input } from "@/components/ui/input"
+import { login } from "./actions";
 
 export default function LoginPage() {
     const [form, setForm] = useState({ email: "", password: "" });
@@ -11,21 +12,23 @@ export default function LoginPage() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
 
+    const [ state, loginAction ] = useActionState(login, undefined);
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setForm({ ...form, [e.target.name]: e.target.value });
         if (error) setError("");
     };
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        setLoading(true);
-        setError("");
-        // TODO: wire up real login logic
-        await new Promise((r) => setTimeout(r, 1500));
-        // Simulate wrong credentials for demo
-        setError("Invalid email or password. Please try again.");
-        setLoading(false);
-    };
+    // const handleSubmit = async (e: React.FormEvent) => {
+    //     e.preventDefault();
+    //     setLoading(true);
+    //     setError("");
+    //     // TODO: wire up real login logic
+    //     await new Promise((r) => setTimeout(r, 1500));
+    //     // Simulate wrong credentials for demo
+    //     setError("Invalid email or password. Please try again.");
+    //     setLoading(false);
+    // };
 
     return (
         <main className="min-h-screen bg-gradient-to-r from-slate-900 to-slate-700 flex items-center justify-center px-4">
@@ -59,17 +62,19 @@ export default function LoginPage() {
                     </div>
 
                     {/* Error banner */}
-                    {error && (
+                    {state?.errors && (
                         <div className="mb-4 flex items-center gap-3 rounded-lg border border-rose-500/30 bg-rose-500/10 px-4 py-3">
                             <svg className="w-4 h-4 flex-none text-rose-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
                             </svg>
-                            <p className="text-xs text-rose-400">{error}</p>
+
+                            { state?.errors.email && <p className="text-xs text-rose-400">{state?.errors.email}</p> }
+                            { state?.errors.password && <p className="text-xs text-rose-400">{state?.errors.password}</p> }
                         </div>
                     )}
 
                     {/* Form */}
-                    <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+                    <form action={loginAction} className="flex flex-col gap-4">
 
                         {/* Email */}
                         <div className="flex flex-col gap-1.5">
