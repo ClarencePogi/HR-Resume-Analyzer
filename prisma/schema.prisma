@@ -4,10 +4,20 @@
 // Get a free hosted Postgres database in seconds: `npx create-db`
 
 generator client {
-  provider = "prisma-client"
-  output   = "../src/generated/prisma"
+  provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "postgresql"
 }
+
+model User {
+  id Int @id @default(autoincrement())
+  name String
+  email String @unique
+}
+
+
+/* npx prisma migrate dev --name init */
+// npx prisma migrate reset - this will fresh the migration
+/* "npx prisma generate" reads your schema.prisma file and auto-generates the Prisma Client — the typed JavaScript/TypeScript code that you import and use in your app. */
