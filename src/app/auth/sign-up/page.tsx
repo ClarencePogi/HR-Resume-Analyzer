@@ -1,27 +1,30 @@
 "use client";
 
-import { useState } from "react";
+import { useActionState, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { signup } from "./action";
 
 export default function SignUpPage() {
-  const [form, setForm] = useState({ name: "", email: "", password: "", confirm: "" });
+  const [form, setForm] = useState({ name: "", email: "", password: "", confirm: "", terms: false });
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [state, SignupAction] = useActionState(signup, undefined);
+
+  const getError = (field: string) => {
+    const errs = state?.errors as any;
+    if (!errs) return undefined;
+    if (errs.general) return Array.isArray(errs.general) ? errs.general.join(" ") : String(errs.general);
+    const v = errs[field];
+    return Array.isArray(v) ? v.join(" ") : v;
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(e.target.name);
-    console.log(e.target.value);
-    setForm({ ...form, [e.target.name]: e.target.value });
+    const { name, type, value, checked } = e.target;
+    setForm({ ...form, [name]: type === "checkbox" ? checked : value });
+
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    // TODO: wire up real sign-up logic
-    await new Promise((r) => setTimeout(r, 1500));
-    setLoading(false);
-  };
 
   return (
     <main className="min-h-screen bg-gradient-to-r from-slate-900 to-slate-700 flex items-center justify-center px-4">
@@ -55,7 +58,7 @@ export default function SignUpPage() {
           </div>
 
           {/* Form */}
-          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+          <form action={SignupAction} className="flex flex-col gap-4">
 
             {/* Full name */}
             <div className="flex flex-col gap-1.5">
@@ -67,9 +70,9 @@ export default function SignUpPage() {
                 placeholder="Jane Doe"
                 value={form.name}
                 onChange={handleChange}
-                required
                 className="w-full rounded-lg bg-slate-900/60 border border-slate-700 px-4 py-2.5 text-sm text-slate-100 placeholder:text-slate-600 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500/50 transition"
               />
+              { getError("name") && <p className="text-xs text-rose-400">{getError("name")}</p> }
             </div>
 
             {/* Email */}
@@ -82,9 +85,9 @@ export default function SignUpPage() {
                 placeholder="jane@example.com"
                 value={form.email}
                 onChange={handleChange}
-                required
                 className="w-full rounded-lg bg-slate-900/60 border border-slate-700 px-4 py-2.5 text-sm text-slate-100 placeholder:text-slate-600 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500/50 transition"
               />
+              { getError("email") && <p className="text-xs text-rose-400">{getError("email")}</p> }
             </div>
 
             {/* Password */}
@@ -98,7 +101,6 @@ export default function SignUpPage() {
                   placeholder="Min. 8 characters"
                   value={form.password}
                   onChange={handleChange}
-                  required
                   className="w-full rounded-lg bg-slate-900/60 border border-slate-700 px-4 py-2.5 pr-10 text-sm text-slate-100 placeholder:text-slate-600 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500/50 transition"
                 />
                 <button
@@ -114,6 +116,7 @@ export default function SignUpPage() {
                   )}
                 </button>
               </div>
+              { getError("password") && <p className="text-xs text-rose-400">{getError("password")}</p> }
             </div>
 
             {/* Confirm password */}
@@ -126,17 +129,23 @@ export default function SignUpPage() {
                 placeholder="Repeat your password"
                 value={form.confirm}
                 onChange={handleChange}
-                required
                 className="w-full rounded-lg bg-slate-900/60 border border-slate-700 px-4 py-2.5 text-sm text-slate-100 placeholder:text-slate-600 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500/50 transition"
               />
               {form.confirm && form.password !== form.confirm && (
                 <p className="text-xs text-rose-400 mt-0.5">Passwords don't match</p>
               )}
+              { (getError("confirm") && !form.confirm) && <p className="text-xs text-rose-400">{getError("confirm")}</p> }
             </div>
 
             {/* Terms */}
             <label className="flex items-start gap-3 cursor-pointer group mt-1">
-              <input type="checkbox" required className="mt-0.5 accent-sky-500 w-4 h-4 flex-none" />
+              <input 
+                name="terms" 
+                checked={form.terms}
+                onChange={handleChange}
+                type="checkbox" 
+                className={`mt-0.5 accent-sky-500 w-4 h-4 flex-none ${getError("terms") ? 'animate-wiggle' : ''}`} />
+              <input type="hidden" name="terms" value={form.terms ? "on" : "off"} />
               <span className="text-xs text-slate-400 leading-relaxed">
                 I agree to the{" "}
                 <Link href="/terms" className="text-sky-400 hover:text-sky-300 underline underline-offset-2">Terms of Service</Link>{" "}
@@ -144,7 +153,7 @@ export default function SignUpPage() {
                 <Link href="/privacy" className="text-sky-400 hover:text-sky-300 underline underline-offset-2">Privacy Policy</Link>
               </span>
             </label>
-
+            {getError("terms") && (<span className="text-rose-400 text-xs mt-1">{getError("terms")}</span>)}
             {/* Submit */}
             <button
               type="submit"
@@ -191,8 +200,8 @@ export default function SignUpPage() {
           {/* Sign in link */}
           <p className="mt-6 text-center text-sm text-slate-500">
             Already have an account?{" "}
-            <Link href="/login" className="text-sky-400 hover:text-sky-300 font-medium underline underline-offset-2 transition">
-              Sign in
+            <Link href="/auth/login" className="text-sky-400 hover:text-sky-300 font-medium underline underline-offset-2 transition">
+              Login
             </Link>
           </p>
         </div>
