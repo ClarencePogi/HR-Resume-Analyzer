@@ -1,14 +1,7 @@
 import "server-only";
 import { prisma } from "@/lib/prisma";
 import { getSession } from "@/lib/sessionCookies";
-
-export type CurrentUser = {
-    id: number;
-    name: string;
-    email: string;
-    roles: string[];
-    permissions: string[];
-};
+import { CurrentUser } from "@/types/auth";
 
 export async function getCurrentUser(): Promise<CurrentUser | null> {
     const session = await getSession();

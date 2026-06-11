@@ -113,7 +113,7 @@ export async function AppSidebar({ ...props }: React.ComponentProps<typeof Sideb
                 ))}
 
                 {/* Current user info + role badge */}
-                {currentUser && (
+                {/* {currentUser && (
                     <div className="px-3 py-2 mt-4 border-t border-sidebar-border">
                         <p className="text-xs text-muted-foreground">Logged in as</p>
                         <p className="text-sm font-semibold truncate">{currentUser.name}</p>
@@ -129,7 +129,7 @@ export async function AppSidebar({ ...props }: React.ComponentProps<typeof Sideb
                             ))}
                         </div>
                     </div>
-                )}
+                )} */}
             </SidebarContent>
             <SidebarRail />
         </Sidebar>
