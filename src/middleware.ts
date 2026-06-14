@@ -19,12 +19,18 @@ export default async function middleware(req: NextRequest) {
 
     const isProtectedRoute = protectedRoutes.some(route => path.startsWith(route));
     const isPublicRoute = publicRoutes.includes(path);
+    const isSetupRoute = path.startsWith("/settings/profile");
 
     const cookie = req.cookies.get("session")?.value;
     const session = await decrypt(cookie);
 
     if (isProtectedRoute && !session?.userId) {
         return NextResponse.redirect(new URL("/auth/login", req.url));
+    }
+
+    // Redirect on profile page to setup other information
+    if (session?.userId && !session?.is_setup && !isSetupRoute) {
+        return NextResponse.redirect(new URL("/settings/profile", req.url));
     }
 
     if (isPublicRoute && session?.userId) {

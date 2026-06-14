@@ -7,6 +7,7 @@ const encodedKey = new TextEncoder().encode(secretKey);
 type SessionPayload = {
     userId: string;
     expiresAt: Date;
+    is_setup: boolean
 };
 
 export async function encrypt(payload: SessionPayload) {

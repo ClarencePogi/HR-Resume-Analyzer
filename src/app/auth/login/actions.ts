@@ -31,7 +31,7 @@ export async function login(prevState: any, formData: FormData) {
     }
 
     const isValid = await bcrypt.compare(password, user.password);
-    console.log(isValid);
+
     if(!isValid) {
         return {
             errors: {
@@ -40,7 +40,7 @@ export async function login(prevState: any, formData: FormData) {
         }
     }
 
-    await createSession(user.id.toString());
+    await createSession(user.id.toString(), user.fullySetup);
     
     redirect('/hr/dashboard');
 }

@@ -38,7 +38,7 @@ export async function signup(prevState: any, formData: FormData) {
         return { errors: { general: ["Something went wrong."] } };
     }
 
-    await createSession(data.user.id.toString());
+    await createSession(data.user.id.toString(), data.user.fullySetup);
 
     redirect('/hr/dashboard');
 }

@@ -4,20 +4,13 @@ import { useActionState, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { signup } from "./action";
+import { getError } from "@/lib/utils";
 
 export default function SignUpPage() {
   const [form, setForm] = useState({ name: "", email: "", password: "", confirm: "", terms: false });
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [state, SignupAction] = useActionState(signup, undefined);
-
-  const getError = (field: string) => {
-    const errs = state?.errors as any;
-    if (!errs) return undefined;
-    if (errs.general) return Array.isArray(errs.general) ? errs.general.join(" ") : String(errs.general);
-    const v = errs[field];
-    return Array.isArray(v) ? v.join(" ") : v;
-  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, type, value, checked } = e.target;
@@ -72,7 +65,7 @@ export default function SignUpPage() {
                 onChange={handleChange}
                 className="w-full rounded-lg bg-slate-900/60 border border-slate-700 px-4 py-2.5 text-sm text-slate-100 placeholder:text-slate-600 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500/50 transition"
               />
-              { getError("name") && <p className="text-xs text-rose-400">{getError("name")}</p> }
+              { getError(state, "name") && <p className="text-xs text-rose-400">{getError(state, "name")}</p> }
             </div>
 
             {/* Email */}
@@ -87,7 +80,7 @@ export default function SignUpPage() {
                 onChange={handleChange}
                 className="w-full rounded-lg bg-slate-900/60 border border-slate-700 px-4 py-2.5 text-sm text-slate-100 placeholder:text-slate-600 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500/50 transition"
               />
-              { getError("email") && <p className="text-xs text-rose-400">{getError("email")}</p> }
+              { getError(state, "email") && <p className="text-xs text-rose-400">{getError(state, "email")}</p> }
             </div>
 
             {/* Password */}
@@ -116,7 +109,7 @@ export default function SignUpPage() {
                   )}
                 </button>
               </div>
-              { getError("password") && <p className="text-xs text-rose-400">{getError("password")}</p> }
+              { getError(state, "password") && <p className="text-xs text-rose-400">{getError(state, "password")}</p> }
             </div>
 
             {/* Confirm password */}
@@ -134,7 +127,7 @@ export default function SignUpPage() {
               {form.confirm && form.password !== form.confirm && (
                 <p className="text-xs text-rose-400 mt-0.5">Passwords don't match</p>
               )}
-              { (getError("confirm") && !form.confirm) && <p className="text-xs text-rose-400">{getError("confirm")}</p> }
+              { (getError(state, "confirm") && !form.confirm) && <p className="text-xs text-rose-400">{getError(state, "confirm")}</p> }
             </div>
 
             {/* Terms */}
@@ -144,7 +137,7 @@ export default function SignUpPage() {
                 checked={form.terms}
                 onChange={handleChange}
                 type="checkbox" 
-                className={`mt-0.5 accent-sky-500 w-4 h-4 flex-none ${getError("terms") ? 'animate-wiggle' : ''}`} />
+                className={`mt-0.5 accent-sky-500 w-4 h-4 flex-none ${getError(state, "terms") ? 'animate-wiggle' : ''}`} />
               <input type="hidden" name="terms" value={form.terms ? "on" : "off"} />
               <span className="text-xs text-slate-400 leading-relaxed">
                 I agree to the{" "}
@@ -153,7 +146,7 @@ export default function SignUpPage() {
                 <Link href="/privacy" className="text-sky-400 hover:text-sky-300 underline underline-offset-2">Privacy Policy</Link>
               </span>
             </label>
-            {getError("terms") && (<span className="text-rose-400 text-xs mt-1">{getError("terms")}</span>)}
+            {getError(state, "terms") && (<span className="text-rose-400 text-xs mt-1">{getError(state, "terms")}</span>)}
             {/* Submit */}
             <button
               type="submit"

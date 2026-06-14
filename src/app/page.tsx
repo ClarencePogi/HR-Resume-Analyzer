@@ -59,10 +59,5 @@ export default function Home() {
 				</section>
 			</div>
 		</LandingLayout>		
-		{/* <AppLayout>
-			<div>
-				<h1>Hello, World</h1>
-			</div>
-		</AppLayout> */}
 	</>;
 }

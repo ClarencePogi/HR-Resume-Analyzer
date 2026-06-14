@@ -37,6 +37,7 @@ export async function getCurrentUser(): Promise<CurrentUser | null> {
         id: user.id,
         name: user.name,
         email: user.email,
+        fullySetup: user.fullySetup,
         roles,
         permissions: [...new Set(permissions)]
     };
