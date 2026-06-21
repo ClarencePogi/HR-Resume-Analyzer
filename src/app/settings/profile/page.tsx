@@ -10,6 +10,7 @@ export default async function Profile() {
     
     const user: User = currentUser.getUser()!;
     const roles: Role[] = await getRoles();
+    const filtered_roles = roles.filter(role => role.id !== 1 ); // Remove Superadmin role
 
     return (
         <div className="flex flex-col justify-center gap-6 w-full">
@@ -22,7 +23,7 @@ export default async function Profile() {
                     </p>    
                 </div>
             </div>
-            <ProfileForm currentUser={user!} roles={roles}/>
+            <ProfileForm currentUser={user} roles={filtered_roles}/>
         </div>
     );
 }

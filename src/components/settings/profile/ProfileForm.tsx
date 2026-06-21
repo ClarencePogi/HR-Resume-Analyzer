@@ -5,14 +5,13 @@ import { Field, FieldDescription, FieldLabel, FieldSet } from "@/components/ui/f
 import { Input } from "@/components/ui/input"
 import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from "@/components/ui/input-group";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Eye, UserCircle } from "lucide-react";
+import { UserCircle } from "lucide-react";
 import { CurrentUser } from "@/types/auth";
 import { useActionState, useEffect, useState } from "react";
-import { Badge } from "@/components/ui/badge"
 import { Role } from "@/types/roles";
-import { Preahvihear } from "next/font/google";
 import { submit } from "@/app/settings/profile/action";
 import { getError } from "@/lib/utils";
+import { toast } from "sonner"
 
 type FormState = {
   name: string
@@ -28,10 +27,11 @@ export default function ProfileForm({ currentUser, roles }: { currentUser: Curre
         name: currentUser.name ?? null,
         email: currentUser.email ?? null,
         avatar: null,
-        role: null,
-        company_name: null,
-        company_email: null,
+        role: currentUser.role.id.toString() ?? null,
+        company_name: currentUser?.company?.name ?? null,
+        company_email: currentUser?.company?.email ?? null,
     })
+
     const [state, submitAction] = useActionState(submit, null);
 
     const [is_edit, setEdit] = useState(false);
@@ -43,13 +43,15 @@ export default function ProfileForm({ currentUser, roles }: { currentUser: Curre
 
         // validate size (2MB)
         if (file.size > 2 * 1024 * 1024) {
-            alert("File too large. Max 2MB.")
+            setForm(prev => ({ ...prev, avatar: null }))
+            toast.error("File too large. Max 2MB.")
+            e.target.value = ""
             return
         }
 
         // validate type
         if (!["image/jpeg", "image/png", "image/gif"].includes(file.type)) {
-            alert("Only JPG, PNG or GIF allowed.")
+            toast.error("Only JPG, PNG or GIF allowed.")
             return
         }
 
@@ -61,17 +63,17 @@ export default function ProfileForm({ currentUser, roles }: { currentUser: Curre
         setPreview(url)
     }
 
-    const [isDirty, setIsDirty] = useState(false)
+    const [dismissed, setDismissed] = useState(false);
 
     useEffect(() => {
-        if (!is_edit) {
-            setIsDirty(false)  // reset dirty on cancel
+        if (state && typeof state !== "boolean" && "error" in state && state.error) {
+            toast.error(state.error)
+            setDismissed(false)
         }
-    }, [is_edit])
 
-    useEffect(() => {
-        if (state) {
-            setIsDirty(false)  // new state arrived, show errors again
+        if(state && typeof state === 'boolean' && state === true) {
+            toast.success("Profile successfully updated.")
+            setEdit(false);
         }
     }, [state])
 
@@ -94,13 +96,15 @@ export default function ProfileForm({ currentUser, roles }: { currentUser: Curre
                     <InputGroup className="w-60">
                         <InputGroupInput 
                             disabled={!is_edit} 
+                            name="avatar"
                             className="cursor-pointer" 
                             accept="image/jpeg,image/png,image/gif" 
                             onChange={handleAvatarChange}
                             id="input-field-avatar" 
                             type="file" />
                     </InputGroup>
-                    <FieldDescription>JPG, PNG or GIF. Max size 2MB.</FieldDescription>
+                    
+                    { getError(state, "avatar") && !dismissed ? <p className="text-xs text-rose-400">{getError(state, "avatar")}</p> : <FieldDescription>JPG, PNG or GIF. Max size 2MB.</FieldDescription> }
                 </div>
             </div>
 
@@ -118,7 +122,7 @@ export default function ProfileForm({ currentUser, roles }: { currentUser: Curre
                             id="input-field-fullname" 
                             type="text" 
                             placeholder="Enter your full name" />
-                        { getError(state, "name") && <p className="text-xs text-rose-400">{getError(state, "name")}</p> }
+                        { (getError(state, "name") && !dismissed) && <p className="text-xs text-rose-400">{getError(state, "name")}</p> }
                     </Field>
                     <Field>
                         <FieldLabel htmlFor="input-field-email">Email</FieldLabel>
@@ -130,7 +134,7 @@ export default function ProfileForm({ currentUser, roles }: { currentUser: Curre
                             id="input-field-email" 
                             type="email" 
                             placeholder="Enter your email" />
-                        { getError(state, "email") && <p className="text-xs text-rose-400">{getError(state, "email")}</p> }
+                        { (getError(state, "email") && !dismissed) && <p className="text-xs text-rose-400">{getError(state, "email")}</p> }
 
                     </Field>
                     <Field className="relative">
@@ -147,7 +151,7 @@ export default function ProfileForm({ currentUser, roles }: { currentUser: Curre
                                 </SelectGroup>
                             </SelectContent>
                         </Select>
-                        { getError(state, "role") && <p className="text-xs text-rose-400">{getError(state, "role")}</p> }
+                        { (getError(state, "role") && !dismissed) && <p className="text-xs text-rose-400">{getError(state, "role")}</p> }
                     </Field>
                 </div>
             </div>
@@ -166,7 +170,7 @@ export default function ProfileForm({ currentUser, roles }: { currentUser: Curre
                             id="input-field-company" 
                             type="text" 
                             placeholder="Enter your company name" />
-                        { getError(state, "company_name") && <p className="text-xs text-rose-400">{getError(state, "company_name")}</p> }
+                        { (getError(state, "company_name") && !dismissed) && <p className="text-xs text-rose-400">{getError(state, "company_name")}</p> }
                     </Field>
                     <Field>
                         <FieldLabel htmlFor="input-field-company-email">Company email</FieldLabel>
@@ -178,7 +182,7 @@ export default function ProfileForm({ currentUser, roles }: { currentUser: Curre
                             id="input-field-company-email" 
                             type="email" 
                             placeholder="Enter your company email" />
-                        { getError(state, "company_email") && <p className="text-xs text-rose-400">{getError(state, "company_email")}</p> }
+                        { (getError(state, "company_email") && !dismissed) && <p className="text-xs text-rose-400">{getError(state, "company_email")}</p> }
                     </Field>
                 </div>
             </div>
@@ -188,7 +192,10 @@ export default function ProfileForm({ currentUser, roles }: { currentUser: Curre
             <div className="flex justify-end border-t border-border pt-4 gap-2">
                 {is_edit ? (
                     <>
-                        <Button type="button" variant="outline" onClick={() => setEdit(false)}>
+                        <Button type="button" variant="outline" onClick={() => {
+                            setEdit(false)
+                            setDismissed(true)
+                        }}>
                             Cancel
                         </Button>
                         <Button type="submit">
@@ -196,12 +203,14 @@ export default function ProfileForm({ currentUser, roles }: { currentUser: Curre
                         </Button>
                     </>
                 ) : (
-                    <Button type="button" onClick={() => setEdit(true)}>
+                    <Button type="button" onClick={() => {
+                        setEdit(true)
+                        setDismissed(false);
+                    }}>
                         Edit
                     </Button>
                 )}
             </div>
-            
         </form>
     );
 }

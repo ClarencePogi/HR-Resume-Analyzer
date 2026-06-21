@@ -22,13 +22,14 @@ export async function getCurrentUser(): Promise<CurrentUser | null> {
                         }
                     }
                 }
-            }
+            },
+            company: true
         }
     });
 
     if (!user) return null;
 
-    const roles = user.userRoles.map(ur => ur.role.name);
+    const roles = user.userRoles.map(ur => ur.role);
     const permissions = user.userRoles.flatMap(ur =>
         ur.role.rolePermissions.map(rp => rp.permission.name)
     );
@@ -38,7 +39,8 @@ export async function getCurrentUser(): Promise<CurrentUser | null> {
         name: user.name,
         email: user.email,
         fullySetup: user.fullySetup,
-        roles,
-        permissions: [...new Set(permissions)]
+        role: {...roles[0]},
+        permissions: [...new Set(permissions)],
+        company: user.company ? { ...user.company } : undefined
     };
 }

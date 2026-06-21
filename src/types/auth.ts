@@ -3,6 +3,14 @@ export type CurrentUser = {
     name: string;
     email: string;
     fullySetup: boolean;
-    roles: string[];
+    companyId?: number
+    role: {
+        id: number
+        name: string
+    };
     permissions: string[];
+    company?: {
+        name: string,
+        email: string
+    } 
 };
