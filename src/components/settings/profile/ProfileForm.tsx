@@ -27,7 +27,7 @@ export default function ProfileForm({ currentUser, roles }: { currentUser: Curre
         name: currentUser.name ?? null,
         email: currentUser.email ?? null,
         avatar: null,
-        role: currentUser.role.id.toString() ?? null,
+        role: currentUser.role?.id?.toString() ?? null,
         company_name: currentUser?.company?.name ?? null,
         company_email: currentUser?.company?.email ?? null,
     })
