@@ -24,7 +24,8 @@ async function seed() {
         create: {
             name: "Superadmin",
             email: "superadmin@example.com",
-            password: await hash_password("password")
+            password: await hash_password("password"),
+            fullySetup: true
         }
     });
 

@@ -44,7 +44,7 @@ export async function GET(req: NextRequest) {
       data: {
         email: profile.email,
         name: profile.name ?? "",
-        password: null,
+        password: '',
         provider: "google",
         fullySetup: false, 
       },

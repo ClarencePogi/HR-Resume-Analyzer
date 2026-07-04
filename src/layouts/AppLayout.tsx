@@ -5,13 +5,14 @@ import {
 } from "@/components/ui/sidebar"
 import React from "react"
 import AppLayoutClient from "./AppLayoutClient" 
+import { BreadCrumb } from "@/types"
 
-export default function AppLayout({ children }: { children: React.ReactNode }) {
+export default function AppLayout({ children, breadcrumb }: { children: React.ReactNode, breadcrumb?: BreadCrumb[] | null }) {
     return (
         <SidebarProvider>
             <AppSidebar />
             <SidebarInset>
-                <AppLayoutClient>
+                <AppLayoutClient breadcrumb={breadcrumb}>
                     {children}
                 </AppLayoutClient>
             </SidebarInset>

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { decrypt } from "./lib/session";
+import { prisma } from "./lib/prisma";
 
 const protectedRoutes = [
     "/admin/manage-users",

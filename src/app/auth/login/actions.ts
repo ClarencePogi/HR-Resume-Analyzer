@@ -30,9 +30,17 @@ export async function login(prevState: any, formData: FormData) {
         }
     }
 
+    if (!user.password) {
+        return {
+            errors: {
+                email: ["Invalid email or password."]
+            }
+        }
+    }
+
     const isValid = await bcrypt.compare(password, user.password);
 
-    if(!isValid) {
+    if (!isValid) {
         return {
             errors: {
                 email: ["Invalid email or password."]
